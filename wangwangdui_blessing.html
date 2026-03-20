@@ -3,28 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>汪汪队祝元宝生日快乐！</title>
+    <title>汪汪队祝元宝天天开心！</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Comic Sans MS', 'Microsoft YaHei', cursive, sans-serif;
-            background: linear-gradient(180deg, #87CEEB 0%, #98FB98 100%);
+            background: linear-gradient(180deg, #87CEEB 0%, #b8f0b8 100%);
             min-height: 100vh;
-            overflow: hidden;
+            overflow-x: hidden;
             position: relative;
         }
 
-        /* 装饰云朵 */
+        /* 云朵 */
         .cloud {
             position: absolute;
             background: white;
             border-radius: 50px;
-            animation: float 6s ease-in-out infinite;
+            animation: floatCloud 8s ease-in-out infinite;
+            opacity: 0.85;
         }
         .cloud::before, .cloud::after {
             content: '';
@@ -32,684 +29,817 @@
             background: white;
             border-radius: 50%;
         }
-        .cloud-1 {
-            width: 100px;
-            height: 40px;
-            top: 10%;
-            left: 10%;
-            animation-delay: 0s;
-        }
-        .cloud-1::before { width: 50px; height: 50px; top: -25px; left: 15px; }
-        .cloud-1::after { width: 40px; height: 40px; top: -15px; left: 45px; }
-
-        .cloud-2 {
-            width: 80px;
-            height: 32px;
-            top: 15%;
-            right: 15%;
-            animation-delay: 2s;
-        }
-        .cloud-2::before { width: 40px; height: 40px; top: -20px; left: 10px; }
-        .cloud-2::after { width: 30px; height: 30px; top: -12px; left: 35px; }
-
-        @keyframes float {
-            0%, 100% { transform: translateX(0); }
-            50% { transform: translateX(20px); }
+        .cloud-1 { width: 120px; height: 45px; top: 8%; left: 8%; animation-delay: 0s; }
+        .cloud-1::before { width: 55px; height: 55px; top: -28px; left: 18px; }
+        .cloud-1::after  { width: 45px; height: 45px; top: -18px; left: 55px; }
+        .cloud-2 { width: 90px; height: 35px; top: 12%; right: 10%; animation-delay: 3s; }
+        .cloud-2::before { width: 42px; height: 42px; top: -22px; left: 12px; }
+        .cloud-2::after  { width: 32px; height: 32px; top: -14px; left: 40px; }
+        .cloud-3 { width: 70px; height: 28px; top: 5%; left: 45%; animation-delay: 1.5s; }
+        .cloud-3::before { width: 35px; height: 35px; top: -18px; left: 10px; }
+        .cloud-3::after  { width: 28px; height: 28px; top: -12px; left: 32px; }
+        @keyframes floatCloud {
+            0%,100% { transform: translateX(0); }
+            50%      { transform: translateX(25px); }
         }
 
         /* 标题 */
         .title {
             text-align: center;
-            padding: 30px 20px 10px;
+            padding: 28px 20px 8px;
             opacity: 0;
-            animation: slideDown 1s ease forwards;
-            animation-delay: 0.5s;
+            animation: slideDown 1s ease forwards 0.4s;
         }
-
         .title h1 {
-            font-size: 2.5rem;
+            font-size: 2.4rem;
             color: #FF6B6B;
             text-shadow: 3px 3px 0 #FFE66D, -1px -1px 0 #fff;
-            margin-bottom: 10px;
+            margin-bottom: 6px;
         }
-
-        .title p {
-            font-size: 1.2rem;
-            color: #4ECDC4;
-            font-weight: bold;
-        }
-
+        .title p { font-size: 1.1rem; color: #3CB371; font-weight: bold; }
         @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-50px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity:0; transform: translateY(-40px); }
+            to   { opacity:1; transform: translateY(0); }
         }
 
-        /* 舞台区域 */
+        /* 开始提示蒙层 */
+        #startOverlay {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.55);
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            z-index: 999;
+            cursor: pointer;
+        }
+        #startOverlay .overlay-box {
+            background: white;
+            border-radius: 30px;
+            padding: 40px 50px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        #startOverlay .overlay-box .paw { font-size: 4rem; margin-bottom: 16px; display: block; }
+        #startOverlay .overlay-box h2 { font-size: 1.8rem; color: #FF6B6B; margin-bottom: 12px; }
+        #startOverlay .overlay-box p  { font-size: 1.1rem; color: #666; }
+        @keyframes pulse {
+            0%,100% { transform: scale(1); }
+            50%      { transform: scale(1.04); }
+        }
+
+        /* 舞台 */
         .stage {
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-end;
             flex-wrap: wrap;
-            padding: 20px;
-            min-height: 50vh;
-            gap: 20px;
+            padding: 10px 20px 130px;
+            gap: 18px;
+            min-height: 60vh;
         }
 
         /* 狗狗容器 */
         .dog-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            display: flex; flex-direction: column; align-items: center;
             opacity: 0;
-            transform: scale(0) rotate(-360deg);
-            transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        }
-
-        .dog-container.show {
-            opacity: 1;
-            transform: scale(1) rotate(0deg);
-        }
-
-        .dog-container.bounce {
-            animation: bounce 0.6s ease infinite;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        /* 狗狗造型 */
-        .dog {
-            width: 100px;
-            height: 100px;
+            transform: translateY(80px) scale(0.5);
+            transition: all 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
             position: relative;
             cursor: pointer;
-            transition: transform 0.3s;
         }
-
-        .dog:hover {
-            transform: scale(1.1);
+        .dog-container.show {
+            opacity: 1;
+            transform: translateY(0) scale(1);
         }
-
-        /* 狗狗名字标签 */
-        .dog-name {
-            background: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            margin-top: 10px;
-            font-weight: bold;
-            font-size: 0.9rem;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            white-space: nowrap;
+        .dog-container.active-bounce {
+            animation: activeBounce 0.5s ease infinite alternate;
+        }
+        @keyframes activeBounce {
+            from { transform: translateY(0) scale(1); }
+            to   { transform: translateY(-14px) scale(1.05); }
         }
 
         /* 对话气泡 */
         .bubble {
             position: absolute;
-            top: -60px;
+            bottom: 115px;
             left: 50%;
-            transform: translateX(-50%);
+            transform: translateX(-50%) scale(0.5);
             background: white;
-            padding: 10px 15px;
-            border-radius: 15px;
-            font-size: 0.85rem;
+            padding: 12px 16px;
+            border-radius: 18px;
+            font-size: 0.82rem;
+            line-height: 1.6;
             white-space: nowrap;
             opacity: 0;
-            transition: all 0.5s ease;
-            box-shadow: 0 3px 15px rgba(0,0,0,0.15);
-            z-index: 10;
+            pointer-events: none;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 4px 18px rgba(0,0,0,0.13);
+            z-index: 20;
+            text-align: center;
+            color: #333;
         }
-
         .bubble::after {
             content: '';
             position: absolute;
-            bottom: -10px;
-            left: 50%;
+            bottom: -12px; left: 50%;
             transform: translateX(-50%);
-            border: 10px solid transparent;
+            border: 12px solid transparent;
             border-top-color: white;
+            border-bottom: 0;
         }
-
         .dog-container.speaking .bubble {
             opacity: 1;
-            top: -70px;
+            transform: translateX(-50%) scale(1);
         }
 
-        /* 每只狗狗的独特颜色 */
-        .dog-ryder { background: #FF6B6B; border-radius: 50% 50% 45% 45%; }
-        .dog-marshall { background: #FFE66D; border-radius: 50% 50% 45% 45%; }
-        .dog-rubble { background: #FFA94D; border-radius: 45% 45% 50% 50%; }
-        .dog-chase { background: #4D96FF; border-radius: 50% 45% 45% 50%; }
-        .dog-skye { background: #FF85A2; border-radius: 50% 50% 45% 45%; }
-        .dog-rocky { background: #69DB7C; border-radius: 45% 50% 45% 50%; }
-        .dog-zuma { background: #748FFC; border-radius: 50% 45% 50% 45%; }
-        .dog-everest { background: #E0E0E0; border-radius: 45% 45% 50% 50%; }
-
-        /* 狗狗眼睛 */
-        .dog .eyes {
-            position: absolute;
-            top: 30%;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 20px;
+        /* 当前说话角色高亮边框 */
+        .dog-container.speaking .dog {
+            box-shadow: 0 0 0 5px gold, 0 0 20px rgba(255,215,0,0.6);
         }
 
-        .dog .eye {
-            width: 15px;
-            height: 20px;
-            background: #333;
+        /* 狗狗本体 */
+        .dog {
+            width: 90px; height: 90px;
+            position: relative;
             border-radius: 50%;
+            transition: box-shadow 0.3s;
+        }
+
+        /* 眼睛 */
+        .dog .eyes {
+            position: absolute; top: 32%;
+            left: 50%; transform: translateX(-50%);
+            display: flex; gap: 18px;
+        }
+        .dog .eye {
+            width: 14px; height: 18px;
+            background: #222; border-radius: 50%;
             position: relative;
         }
-
         .dog .eye::after {
             content: '';
             position: absolute;
-            width: 5px;
-            height: 5px;
-            background: white;
-            border-radius: 50%;
-            top: 3px;
-            left: 3px;
+            width: 5px; height: 5px;
+            background: white; border-radius: 50%;
+            top: 3px; left: 3px;
+        }
+        /* 说话时眼睛眨眼 */
+        .dog-container.speaking .eye {
+            animation: blink 1.8s ease-in-out infinite;
+        }
+        @keyframes blink {
+            0%,90%,100% { transform: scaleY(1); }
+            95%          { transform: scaleY(0.15); }
         }
 
-        /* 狗狗鼻子 */
-        .dog .nose {
-            position: absolute;
-            top: 55%;
-            left: 50%;
+        /* 嘴巴 */
+        .dog .mouth {
+            position: absolute; top: 62%; left: 50%;
             transform: translateX(-50%);
-            width: 20px;
-            height: 15px;
+            width: 28px; height: 14px;
+            border: 3px solid #333;
+            border-top: none;
+            border-radius: 0 0 14px 14px;
+        }
+        .dog-container.speaking .mouth {
+            animation: talk 0.35s ease-in-out infinite alternate;
+        }
+        @keyframes talk {
+            from { height: 8px; }
+            to   { height: 18px; }
+        }
+
+        /* 鼻子 */
+        .dog .nose {
+            position: absolute; top: 50%; left: 50%;
+            transform: translateX(-50%);
+            width: 18px; height: 12px;
             background: #333;
             border-radius: 50% 50% 50% 50% / 30% 30% 70% 70%;
         }
 
-        /* 狗狗耳朵 */
+        /* 耳朵 */
         .dog .ear {
-            position: absolute;
-            top: 10%;
-            width: 25px;
-            height: 35px;
+            position: absolute; top: 5%;
+            width: 24px; height: 32px;
             border-radius: 50%;
         }
-        .dog .ear-left { left: 5%; transform: rotate(-20deg); }
-        .dog .ear-right { right: 5%; transform: rotate(20deg); }
+        .dog .ear-left  { left:  3%; transform: rotate(-20deg); }
+        .dog .ear-right { right: 3%; transform: rotate(20deg); }
 
-        /* 每只狗狗的装饰 */
-        .dog-ryder .ear { background: #FF4757; }
-        .dog-ryder .hat {
-            position: absolute;
-            top: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 25px;
-            background: #FF6B6B;
-            border-radius: 10px 10px 0 0;
-            border-bottom: 5px solid #fff;
-        }
-
-        .dog-marshall .fire-hat {
-            position: absolute;
-            top: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 50px;
-            height: 30px;
-            background: #FFE66D;
-            border-radius: 50% 50% 0 0;
-            border: 3px solid #FF6B6B;
-        }
-
-        .dog-rubble .helmet {
-            position: absolute;
-            top: -18px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 55px;
-            height: 28px;
-            background: #FFA94D;
-            border-radius: 10px;
-            border-bottom: 5px solid #FFD93D;
-        }
-
-        .dog-chase .police-hat {
-            position: absolute;
-            top: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 25px;
-            background: #4D96FF;
-            border-radius: 5px 5px 0 0;
-            border-bottom: 5px solid #fff;
-        }
-
-        .dog-skye .helicopter-hat {
-            position: absolute;
-            top: -22px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 50px;
-            height: 35px;
-            background: #FF85A2;
-            border-radius: 50% 50% 0 0;
-        }
-        .dog-skye .helicopter-hat::before {
-            content: '';
-            position: absolute;
-            top: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 40px;
-            height: 10px;
-            background: #FF85A2;
-            border-radius: 50%;
-            animation: spin 0.5s linear infinite;
-        }
-
-        @keyframes spin {
-            from { transform: translateX(-50%) rotate(0deg); }
-            to { transform: translateX(-50%) rotate(360deg); }
-        }
-
-        .dog-rocky .tools {
-            position: absolute;
-            top: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 25px;
-        }
-
-        .dog-zuma .life-vest {
-            position: absolute;
-            top: 20%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 20px;
-            background: #FF6B6B;
-            border-radius: 5px;
-        }
-
-        .dog-everest .scarf {
-            position: absolute;
-            top: 15%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 50px;
-            height: 15px;
-            background: #FF6B6B;
-            border-radius: 5px;
-        }
-
-        /* 控制按钮 */
-        .controls {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 15px;
-            z-index: 100;
-        }
-
-        .btn {
-            padding: 15px 30px;
-            font-size: 1.1rem;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
+        /* 名字标签 */
+        .dog-name {
+            background: white;
+            padding: 4px 14px;
+            border-radius: 20px;
+            margin-top: 8px;
             font-weight: bold;
-            transition: all 0.3s;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            font-size: 0.82rem;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            white-space: nowrap;
+            color: #444;
         }
 
-        .btn-play {
-            background: linear-gradient(135deg, #FF6B6B, #FF8E8E);
-            color: white;
+        /* ── 每只狗的颜色 ── */
+        .dog-ryder    { background: #FF7043; }
+        .dog-ryder .ear { background: #E64A19; }
+        .dog-marshall { background: #FDD835; }
+        .dog-marshall .ear { background: #F9A825; }
+        .dog-rubble   { background: #FF8A65; }
+        .dog-rubble .ear { background: #E64A19; }
+        .dog-chase    { background: #42A5F5; }
+        .dog-chase .ear { background: #1565C0; }
+        .dog-skye     { background: #F48FB1; }
+        .dog-skye .ear { background: #C2185B; }
+        .dog-rocky    { background: #66BB6A; }
+        .dog-rocky .ear { background: #2E7D32; }
+        .dog-zuma     { background: #AB47BC; }
+        .dog-zuma .ear { background: #6A1B9A; }
+        .dog-everest  { background: #B0BEC5; }
+        .dog-everest .ear { background: #546E7A; }
+
+        /* ── 帽子 / 配件 ── */
+        .hat-base {
+            position: absolute; left: 50%; transform: translateX(-50%);
+        }
+        /* 阿奇 - 平板/头盔 */
+        .ryder-helmet {
+            top: -18px; width: 62px; height: 22px;
+            background: #D32F2F; border-radius: 8px 8px 0 0;
+            border-bottom: 4px solid #fff;
+        }
+        /* 马歇尔 - 消防帽 */
+        .marshall-hat {
+            top: -22px; width: 52px; height: 28px;
+            background: #FF1744; border-radius: 50% 50% 0 0;
+            border: 3px solid #fff;
+        }
+        /* 砾石 - 安全帽 */
+        .rubble-hat {
+            top: -20px; width: 58px; height: 26px;
+            background: #FF6D00; border-radius: 10px 10px 0 0;
+            border-bottom: 5px solid #FFD600;
+        }
+        /* 奇奇 - 警察帽 */
+        .chase-hat {
+            top: -22px; width: 64px; height: 22px;
+            background: #1565C0; border-radius: 6px 6px 0 0;
+            border-bottom: 4px solid #fff;
+        }
+        .chase-badge {
+            position: absolute; top: -10px; left: 50%;
+            transform: translateX(-50%);
+            font-size: 14px; line-height: 1;
+        }
+        /* 毛毛 - 飞行头盔 */
+        .skye-hat {
+            top: -26px; width: 52px; height: 32px;
+            background: #EC407A; border-radius: 50% 50% 0 0;
+        }
+        .skye-propeller {
+            position: absolute; top: -38px; left: 50%;
+            transform: translateX(-50%);
+            width: 50px; height: 8px;
+            background: #EC407A; border-radius: 50%;
+            animation: spinProp 0.6s linear infinite;
+        }
+        @keyframes spinProp {
+            from { transform: translateX(-50%) rotate(0deg); }
+            to   { transform: translateX(-50%) rotate(360deg); }
+        }
+        /* 石头 - 工具帽 */
+        .rocky-hat {
+            top: -18px; width: 56px; height: 22px;
+            background: #388E3C; border-radius: 6px 6px 0 0;
+        }
+        .rocky-wrench {
+            position: absolute; top: -12px; left: 50%;
+            transform: translateX(-50%);
+            font-size: 18px;
+        }
+        /* 冰冰 - 救生衣领圈 */
+        .zuma-vest {
+            top: 18px; width: 70px; height: 18px;
+            background: #FF6D00; border-radius: 6px;
+        }
+        /* 天天 - 围巾 */
+        .everest-scarf {
+            top: 16px; width: 60px; height: 16px;
+            background: #C62828; border-radius: 6px;
         }
 
-        .btn-play:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 25px rgba(255,107,107,0.4);
+        /* 控制区 */
+        .controls {
+            position: fixed; bottom: 25px; left: 50%;
+            transform: translateX(-50%);
+            display: flex; gap: 14px;
+            z-index: 200;
         }
-
-        .btn-reset {
-            background: linear-gradient(135deg, #4ECDC4, #6BE3DB);
-            color: white;
+        .btn {
+            padding: 14px 28px;
+            font-size: 1.05rem; font-weight: bold;
+            border: none; border-radius: 50px; cursor: pointer;
+            transition: all 0.25s;
+            box-shadow: 0 5px 18px rgba(0,0,0,0.2);
+            font-family: inherit;
         }
+        .btn-play  { background: linear-gradient(135deg,#FF6B6B,#FF9A9A); color: white; }
+        .btn-reset { background: linear-gradient(135deg,#4ECDC4,#6BE3DB); color: white; }
+        .btn:active { transform: scale(0.95); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        .btn-reset:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 25px rgba(78,205,196,0.4);
-        }
-
-        /* 底部装饰 */
+        /* 草地 */
         .grass {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 80px;
-            background: linear-gradient(180deg, #98FB98 0%, #32CD32 100%);
-            border-top: 5px solid #228B22;
-        }
-
-        .grass::before {
-            content: '';
-            position: absolute;
-            top: -20px;
-            left: 0;
-            right: 0;
-            height: 20px;
-            background: 
-                radial-gradient(ellipse 20px 30px at 10% 100%, #90EE90 50%, transparent 50%),
-                radial-gradient(ellipse 25px 35px at 30% 100%, #90EE90 50%, transparent 50%),
-                radial-gradient(ellipse 20px 30px at 50% 100%, #90EE90 50%, transparent 50%),
-                radial-gradient(ellipse 25px 35px at 70% 100%, #90EE90 50%, transparent 50%),
-                radial-gradient(ellipse 20px 30px at 90% 100%, #90EE90 50%, transparent 50%);
+            position: fixed; bottom: 0; left: 0; right: 0; height: 72px;
+            background: linear-gradient(180deg, #81C784 0%, #2E7D32 100%);
+            border-top: 4px solid #1B5E20;
+            z-index: 1;
         }
 
         /* 星星特效 */
         .star {
-            position: absolute;
-            font-size: 2rem;
-            animation: starPop 0.5s ease forwards;
-            opacity: 0;
+            position: absolute; font-size: 1.8rem;
+            pointer-events: none;
+            animation: starPop 0.8s ease forwards;
+        }
+        @keyframes starPop {
+            0%   { opacity:0; transform: scale(0) rotate(0deg) translateY(0); }
+            50%  { opacity:1; transform: scale(1.4) rotate(180deg) translateY(-20px); }
+            100% { opacity:0; transform: scale(0.5) rotate(360deg) translateY(-40px); }
         }
 
-        @keyframes starPop {
-            0% { opacity: 0; transform: scale(0) rotate(0deg); }
-            50% { opacity: 1; transform: scale(1.5) rotate(180deg); }
-            100% { opacity: 0; transform: scale(1) rotate(360deg); }
+        /* 彩纸庆祝 */
+        .confetti {
+            position: fixed; top: -20px;
+            width: 12px; height: 12px;
+            border-radius: 2px;
+            animation: confettiFall linear forwards;
+            pointer-events: none;
+            z-index: 500;
+        }
+        @keyframes confettiFall {
+            0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* 当前角色名显示 */
+        #speakerBanner {
+            position: fixed; top: 20px; left: 50%;
+            transform: translateX(-50%) scale(0);
+            background: linear-gradient(135deg, #FF6B6B, #FFD93D);
+            color: white; font-weight: bold; font-size: 1.1rem;
+            padding: 10px 28px; border-radius: 30px;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.2);
+            z-index: 300;
+            transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+            white-space: nowrap;
+        }
+        #speakerBanner.visible {
+            transform: translateX(-50%) scale(1);
+        }
+
+        /* 进度条 */
+        #progressBar {
+            position: fixed; top: 0; left: 0;
+            height: 5px; width: 0%;
+            background: linear-gradient(90deg, #FF6B6B, #FFD93D, #4ECDC4);
+            z-index: 400;
+            transition: width 0.3s ease;
         }
 
         /* 响应式 */
         @media (max-width: 600px) {
-            .title h1 { font-size: 1.8rem; }
-            .dog { width: 70px; height: 70px; }
-            .dog-container { transform: scale(0.8); }
-            .dog-container.show { transform: scale(0.8); }
-            .btn { padding: 12px 20px; font-size: 1rem; }
+            .title h1 { font-size: 1.7rem; }
+            .dog { width: 72px; height: 72px; }
+            .bubble { font-size: 0.75rem; }
+            .btn { padding: 12px 20px; font-size: 0.95rem; }
         }
     </style>
 </head>
 <body>
-    <!-- 云朵装饰 -->
-    <div class="cloud cloud-1"></div>
-    <div class="cloud cloud-2"></div>
 
-    <!-- 标题 -->
-    <div class="title">
-        <h1>🐾 汪汪队送祝福 🐾</h1>
-        <p>祝元宝天天开心，你要听爸爸话！</p>
+<!-- 进度条 -->
+<div id="progressBar"></div>
+
+<!-- 开始蒙层（解决移动端自动播放限制） -->
+<div id="startOverlay" onclick="startAll()">
+    <div class="overlay-box">
+        <span class="paw">🐾</span>
+        <h2>元宝，汪汪队来啦！</h2>
+        <p>点击屏幕，开始接收祝福～</p>
+    </div>
+</div>
+
+<!-- 顶部角色名横幅 -->
+<div id="speakerBanner">🐶 马歇尔说话啦！</div>
+
+<!-- 云朵 -->
+<div class="cloud cloud-1"></div>
+<div class="cloud cloud-2"></div>
+<div class="cloud cloud-3"></div>
+
+<!-- 标题 -->
+<div class="title">
+    <h1>🐾 汪汪队送祝福 🐾</h1>
+    <p>元宝，你好棒！汪汪队都来看你啦～</p>
+</div>
+
+<!-- 舞台 -->
+<div class="stage" id="stage">
+
+    <!-- 阿奇 -->
+    <div class="dog-container" data-index="0">
+        <div class="bubble">汪汪队，出动！<br>祝元宝天天开心，<br>你要听爸爸话！</div>
+        <div class="dog dog-ryder">
+            <div class="hat-base ryder-helmet"></div>
+            <div class="ear ear-left"></div>
+            <div class="ear ear-right"></div>
+            <div class="eyes"><div class="eye"></div><div class="eye"></div></div>
+            <div class="nose"></div>
+            <div class="mouth"></div>
+        </div>
+        <div class="dog-name">👦 阿奇</div>
     </div>
 
-    <!-- 舞台 -->
-    <div class="stage" id="stage">
-        <!-- 阿奇 -->
-        <div class="dog-container" data-order="0">
-            <div class="bubble">汪汪队，出动！<br>祝元宝天天开心，<br>要听爸爸的话哦！</div>
-            <div class="dog dog-ryder">
-                <div class="hat"></div>
-                <div class="ear ear-left"></div>
-                <div class="ear ear-right"></div>
-                <div class="eyes">
-                    <div class="eye"></div>
-                    <div class="eye"></div>
-                </div>
-                <div class="nose"></div>
-            </div>
-            <div class="dog-name">阿奇 (Ryder)</div>
+    <!-- 马歇尔 -->
+    <div class="dog-container" data-index="1">
+        <div class="bubble">消防员马歇尔报到！<br>祝元宝天天开心，<br>你要听爸爸话！</div>
+        <div class="dog dog-marshall">
+            <div class="hat-base marshall-hat"></div>
+            <div class="ear ear-left"></div>
+            <div class="ear ear-right"></div>
+            <div class="eyes"><div class="eye"></div><div class="eye"></div></div>
+            <div class="nose"></div>
+            <div class="mouth"></div>
         </div>
-
-        <!-- 马歇尔 -->
-        <div class="dog-container" data-order="1">
-            <div class="bubble">消防员马歇尔报到！<br>祝元宝天天开心，<br>要听爸爸的话！</div>
-            <div class="dog dog-marshall">
-                <div class="fire-hat"></div>
-                <div class="ear ear-left"></div>
-                <div class="ear ear-right"></div>
-                <div class="eyes">
-                    <div class="eye"></div>
-                    <div class="eye"></div>
-                </div>
-                <div class="nose"></div>
-            </div>
-            <div class="dog-name">马歇尔 (Marshall)</div>
-        </div>
-
-        <!-- 砾石 -->
-        <div class="dog-container" data-order="2">
-            <div class="bubble">砾石最厉害！<br>祝元宝天天开心，<br>要听爸爸的话，汪汪！</div>
-            <div class="dog dog-rubble">
-                <div class="helmet"></div>
-                <div class="ear ear-left"></div>
-                <div class="ear ear-right"></div>
-                <div class="eyes">
-                    <div class="eye"></div>
-                    <div class="eye"></div>
-                </div>
-                <div class="nose"></div>
-            </div>
-            <div class="dog-name">砾石 (Rubble)</div>
-        </div>
-
-        <!-- 奇奇 -->
-        <div class="dog-container" data-order="3">
-            <div class="bubble">奇奇警察执行任务！<br>命令：元宝要天天开心，<br>听爸爸的话！</div>
-            <div class="dog dog-chase">
-                <div class="police-hat"></div>
-                <div class="ear ear-left"></div>
-                <div class="ear ear-right"></div>
-                <div class="eyes">
-                    <div class="eye"></div>
-                    <div class="eye"></div>
-                </div>
-                <div class="nose"></div>
-            </div>
-            <div class="dog-name">奇奇 (Chase)</div>
-        </div>
-
-        <!-- 毛毛 -->
-        <div class="dog-container" data-order="4">
-            <div class="bubble">毛毛从天而降！<br>祝元宝天天开心，<br>要听爸爸的话呀～</div>
-            <div class="dog dog-skye">
-                <div class="helicopter-hat"></div>
-                <div class="ear ear-left"></div>
-                <div class="ear ear-right"></div>
-                <div class="eyes">
-                    <div class="eye"></div>
-                    <div class="eye"></div>
-                </div>
-                <div class="nose"></div>
-            </div>
-            <div class="dog-name">毛毛 (Skye)</div>
-        </div>
-
-        <!-- 石头 -->
-        <div class="dog-container" data-order="5">
-            <div class="bubble">石头来啦！<br>祝元宝天天开心，<br>记得听爸爸的话！汪！</div>
-            <div class="dog dog-rocky">
-                <div class="tools">🔧</div>
-                <div class="ear ear-left"></div>
-                <div class="ear ear-right"></div>
-                <div class="eyes">
-                    <div class="eye"></div>
-                    <div class="eye"></div>
-                </div>
-                <div class="nose"></div>
-            </div>
-            <div class="dog-name">石头 (Rocky)</div>
-        </div>
-
-        <!-- 冰冰 -->
-        <div class="dog-container" data-order="6">
-            <div class="bubble">冲浪达人冰冰！<br>祝元宝天天开心，<br>听爸爸话，耶！</div>
-            <div class="dog dog-zuma">
-                <div class="life-vest"></div>
-                <div class="ear ear-left"></div>
-                <div class="ear ear-right"></div>
-                <div class="eyes">
-                    <div class="eye"></div>
-                    <div class="eye"></div>
-                </div>
-                <div class="nose"></div>
-            </div>
-            <div class="dog-name">冰冰 (Zuma)</div>
-        </div>
-
-        <!-- 天天 -->
-        <div class="dog-container" data-order="7">
-            <div class="bubble">天天来送祝福啦！<br>祝元宝天天开心，<br>要听爸爸的话哦！</div>
-            <div class="dog dog-everest">
-                <div class="scarf"></div>
-                <div class="ear ear-left"></div>
-                <div class="ear ear-right"></div>
-                <div class="eyes">
-                    <div class="eye"></div>
-                    <div class="eye"></div>
-                </div>
-                <div class="nose"></div>
-            </div>
-            <div class="dog-name">天天 (Everest)</div>
-        </div>
+        <div class="dog-name">🚒 马歇尔</div>
     </div>
 
-    <!-- 控制按钮 -->
-    <div class="controls">
-        <button class="btn btn-play" onclick="playShow()">▶ 开始祝福</button>
-        <button class="btn btn-reset" onclick="resetShow()">↺ 重播</button>
+    <!-- 砾石 -->
+    <div class="dog-container" data-index="2">
+        <div class="bubble">砾石最厉害！<br>祝元宝天天开心，<br>你要听爸爸话！汪！</div>
+        <div class="dog dog-rubble">
+            <div class="hat-base rubble-hat"></div>
+            <div class="ear ear-left"></div>
+            <div class="ear ear-right"></div>
+            <div class="eyes"><div class="eye"></div><div class="eye"></div></div>
+            <div class="nose"></div>
+            <div class="mouth"></div>
+        </div>
+        <div class="dog-name">🏗️ 砾石</div>
     </div>
 
-    <!-- 草地装饰 -->
-    <div class="grass"></div>
+    <!-- 奇奇 -->
+    <div class="dog-container" data-index="3">
+        <div class="bubble">奇奇警察执行任务！<br>命令：元宝天天开心，<br>必须听爸爸的话！</div>
+        <div class="dog dog-chase">
+            <div class="hat-base chase-hat"></div>
+            <div class="chase-badge hat-base">⭐</div>
+            <div class="ear ear-left"></div>
+            <div class="ear ear-right"></div>
+            <div class="eyes"><div class="eye"></div><div class="eye"></div></div>
+            <div class="nose"></div>
+            <div class="mouth"></div>
+        </div>
+        <div class="dog-name">🚓 奇奇</div>
+    </div>
 
-    <script>
-        const dogs = document.querySelectorAll('.dog-container');
-        let currentDog = -1;
-        let isPlaying = false;
+    <!-- 毛毛 -->
+    <div class="dog-container" data-index="4">
+        <div class="bubble">毛毛从天而降！<br>祝元宝天天开心，<br>你要听爸爸的话呀～</div>
+        <div class="dog dog-skye">
+            <div class="hat-base skye-hat"></div>
+            <div class="skye-propeller hat-base"></div>
+            <div class="ear ear-left"></div>
+            <div class="ear ear-right"></div>
+            <div class="eyes"><div class="eye"></div><div class="eye"></div></div>
+            <div class="nose"></div>
+            <div class="mouth"></div>
+        </div>
+        <div class="dog-name">🚁 毛毛</div>
+    </div>
 
-        // 音频上下文
-        let audioContext;
+    <!-- 石头 -->
+    <div class="dog-container" data-index="5">
+        <div class="bubble">石头来啦！<br>祝元宝天天开心，<br>记得听爸爸的话！汪！</div>
+        <div class="dog dog-rocky">
+            <div class="hat-base rocky-hat"></div>
+            <div class="rocky-wrench hat-base">🔧</div>
+            <div class="ear ear-left"></div>
+            <div class="ear ear-right"></div>
+            <div class="eyes"><div class="eye"></div><div class="eye"></div></div>
+            <div class="nose"></div>
+            <div class="mouth"></div>
+        </div>
+        <div class="dog-name">🔧 石头</div>
+    </div>
 
-        function initAudio() {
-            if (!audioContext) {
-                audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            }
-        }
+    <!-- 冰冰 -->
+    <div class="dog-container" data-index="6">
+        <div class="bubble">冲浪达人冰冰来啦！<br>祝元宝天天开心，<br>听爸爸话，耶！</div>
+        <div class="dog dog-zuma">
+            <div class="hat-base zuma-vest"></div>
+            <div class="ear ear-left"></div>
+            <div class="ear ear-right"></div>
+            <div class="eyes"><div class="eye"></div><div class="eye"></div></div>
+            <div class="nose"></div>
+            <div class="mouth"></div>
+        </div>
+        <div class="dog-name">🏄 冰冰</div>
+    </div>
 
-        function playSound(frequency, duration, type = 'sine') {
-            if (!audioContext) return;
-            
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
-            
-            oscillator.frequency.value = frequency;
-            oscillator.type = type;
-            
-            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
-            
-            oscillator.start(audioContext.currentTime);
-            oscillator.stop(audioContext.currentTime + duration);
-        }
+    <!-- 天天 -->
+    <div class="dog-container" data-index="7">
+        <div class="bubble">天天来送祝福啦！<br>祝元宝天天开心，<br>你要听爸爸的话哦！</div>
+        <div class="dog dog-everest">
+            <div class="hat-base everest-scarf"></div>
+            <div class="ear ear-left"></div>
+            <div class="ear ear-right"></div>
+            <div class="eyes"><div class="eye"></div><div class="eye"></div></div>
+            <div class="nose"></div>
+            <div class="mouth"></div>
+        </div>
+        <div class="dog-name">🏔️ 天天</div>
+    </div>
 
-        function playDing() {
-            playSound(800, 0.3, 'sine');
-            setTimeout(() => playSound(1000, 0.3, 'sine'), 150);
-        }
+</div>
 
-        function playWoof() {
-            playSound(300, 0.15, 'square');
-            setTimeout(() => playSound(250, 0.2, 'square'), 100);
-        }
+<!-- 控制按钮 -->
+<div class="controls">
+    <button class="btn btn-play"  id="btnPlay"  onclick="playShow()">▶ 开始祝福</button>
+    <button class="btn btn-reset" id="btnReset" onclick="resetShow()">↺ 重播</button>
+</div>
 
-        function createStars(element) {
-            const rect = element.getBoundingClientRect();
-            for (let i = 0; i < 5; i++) {
-                const star = document.createElement('div');
-                star.className = 'star';
-                star.textContent = '⭐';
-                star.style.left = (Math.random() * 60 + 20) + '%';
-                star.style.top = (Math.random() * 60 + 20) + '%';
-                star.style.animationDelay = (i * 0.1) + 's';
-                element.appendChild(star);
-                
-                setTimeout(() => star.remove(), 1000);
-            }
-        }
+<!-- 草地 -->
+<div class="grass"></div>
 
-        function resetShow() {
-            dogs.forEach(dog => {
-                dog.classList.remove('show', 'speaking', 'bounce');
-            });
-            currentDog = -1;
-            isPlaying = false;
-        }
+<script>
+// ─────────────────────────────────────────────
+//  角色配置：台词 + 语音参数
+// ─────────────────────────────────────────────
+const characters = [
+    {
+        name: '阿奇',
+        intro: '阿奇说',
+        text: '汪汪队，出动！祝元宝天天开心，你要听爸爸话！',
+        pitch: 1.3,   // 少年感，偏高
+        rate:  0.88,
+        volume: 1
+    },
+    {
+        name: '马歇尔',
+        intro: '马歇尔说',
+        text: '消防员马歇尔报到！祝元宝天天开心，你要听爸爸话！汪！',
+        pitch: 1.0,   // 憨厚中音
+        rate:  0.85,
+        volume: 1
+    },
+    {
+        name: '砾石',
+        intro: '砾石说',
+        text: '砾石最厉害！祝元宝天天开心，你要听爸爸话！汪汪！',
+        pitch: 0.85,  // 低沉粗犷
+        rate:  0.82,
+        volume: 1
+    },
+    {
+        name: '奇奇',
+        intro: '奇奇说',
+        text: '奇奇警察执行任务！命令：元宝天天开心，必须听爸爸的话！',
+        pitch: 1.1,   // 干练
+        rate:  0.92,
+        volume: 1
+    },
+    {
+        name: '毛毛',
+        intro: '毛毛说',
+        text: '毛毛从天而降！祝元宝天天开心，你要听爸爸的话呀～',
+        pitch: 1.5,   // 女声，高亮
+        rate:  0.9,
+        volume: 1
+    },
+    {
+        name: '石头',
+        intro: '石头说',
+        text: '石头来啦！祝元宝天天开心，记得听爸爸的话！汪！',
+        pitch: 0.9,   // 稳重
+        rate:  0.85,
+        volume: 1
+    },
+    {
+        name: '冰冰',
+        intro: '冰冰说',
+        text: '冲浪达人冰冰来啦！祝元宝天天开心，听爸爸话，耶！',
+        pitch: 1.2,
+        rate:  0.95,
+        volume: 1
+    },
+    {
+        name: '天天',
+        intro: '天天说',
+        text: '天天来送祝福啦！祝元宝天天开心，你要听爸爸的话哦！',
+        pitch: 1.4,   // 温柔女声
+        rate:  0.85,
+        volume: 1
+    }
+];
 
-        async function playShow() {
-            if (isPlaying) return;
-            isPlaying = true;
-            initAudio();
-            
-            resetShow();
-            
-            // 依次显示每只狗狗
-            for (let i = 0; i < dogs.length; i++) {
-                currentDog = i;
-                
-                // 显示狗狗
-                dogs[i].classList.add('show');
-                playDing();
-                createStars(dogs[i]);
-                
-                // 等待一下
-                await sleep(600);
-                
-                // 说话（显示气泡）
-                dogs[i].classList.add('speaking', 'bounce');
-                playWoof();
-                
-                // 说话时间
-                await sleep(2500);
-                
-                // 停止说话
-                dogs[i].classList.remove('speaking', 'bounce');
-                
-                // 等待一下再显示下一个
-                await sleep(500);
-            }
-            
-            // 全部完成，播放庆祝音效
-            playDing();
-            setTimeout(() => playDing(), 200);
-            setTimeout(() => playDing(), 400);
-            
-            // 显示完成消息
-            setTimeout(() => {
-                alert('🎉 汪汪队祝福完成！祝元宝天天开心，听爸爸话！');
-                isPlaying = false;
-            }, 1000);
-        }
+const dogs        = document.querySelectorAll('.dog-container');
+const banner      = document.getElementById('speakerBanner');
+const progressBar = document.getElementById('progressBar');
+const btnPlay     = document.getElementById('btnPlay');
+const btnReset    = document.getElementById('btnReset');
 
-        function sleep(ms) {
-            return new Promise(resolve => setTimeout(resolve, ms));
-        }
+let isPlaying  = false;
+let stopFlag   = false;
+let synth      = window.speechSynthesis;
+let voices     = [];
 
-        // 页面加载后自动播放
-        window.onload = () => {
-            setTimeout(() => {
-                playShow();
-            }, 1000);
-        };
-    </script>
+// 加载语音列表
+function loadVoices() {
+    voices = synth.getVoices();
+}
+loadVoices();
+if (speechSynthesis.onvoiceschanged !== undefined) {
+    speechSynthesis.onvoiceschanged = loadVoices;
+}
+
+// 选一个中文语音（优先 zh-CN 女声）
+function getVoice(preferFemale) {
+    const zhVoices = voices.filter(v => v.lang && v.lang.startsWith('zh'));
+    if (zhVoices.length === 0) return null;
+    if (preferFemale) {
+        const female = zhVoices.find(v => /female|woman|girl|Ting|Mei|Yan|Li|Hui|Xia/i.test(v.name));
+        if (female) return female;
+    }
+    return zhVoices[0];
+}
+
+// 语音合成朗读，返回 Promise
+function speak(char) {
+    return new Promise((resolve) => {
+        if (!synth) { resolve(); return; }
+        synth.cancel();
+
+        const utter = new SpeechSynthesisUtterance(char.text);
+        utter.lang   = 'zh-CN';
+        utter.pitch  = char.pitch;
+        utter.rate   = char.rate;
+        utter.volume = char.volume;
+
+        const preferFemale = char.pitch >= 1.4;
+        const voice = getVoice(preferFemale);
+        if (voice) utter.voice = voice;
+
+        utter.onend   = () => resolve();
+        utter.onerror = () => resolve();
+
+        // iOS Safari 需要在用户触发后调用
+        synth.speak(utter);
+
+        // 超时保护：最多等 8 秒
+        setTimeout(resolve, 8000);
+    });
+}
+
+function sleep(ms) {
+    return new Promise(r => setTimeout(r, ms));
+}
+
+// 星星特效
+function spawnStars(el) {
+    const emojis = ['⭐','🌟','✨','💫','🎉'];
+    for (let i = 0; i < 6; i++) {
+        const s = document.createElement('div');
+        s.className = 'star';
+        s.textContent = emojis[i % emojis.length];
+        s.style.cssText = `
+            left:${10 + Math.random()*80}%;
+            top:${10 + Math.random()*60}%;
+            animation-delay:${i*0.1}s;
+        `;
+        el.appendChild(s);
+        setTimeout(() => s.remove(), 1000);
+    }
+}
+
+// 彩纸庆祝
+function launchConfetti() {
+    const colors = ['#FF6B6B','#FFD93D','#4ECDC4','#A29BFE','#FF85A2','#69DB7C'];
+    for (let i = 0; i < 60; i++) {
+        setTimeout(() => {
+            const c = document.createElement('div');
+            c.className = 'confetti';
+            c.style.cssText = `
+                left:${Math.random()*100}vw;
+                background:${colors[Math.floor(Math.random()*colors.length)]};
+                width:${8+Math.random()*10}px;
+                height:${8+Math.random()*10}px;
+                animation-duration:${2+Math.random()*2}s;
+                animation-delay:${Math.random()*0.5}s;
+            `;
+            document.body.appendChild(c);
+            setTimeout(() => c.remove(), 4000);
+        }, i * 40);
+    }
+}
+
+// 重置
+function resetShow() {
+    stopFlag = true;
+    synth && synth.cancel();
+    isPlaying = false;
+    dogs.forEach(d => d.classList.remove('show','speaking','active-bounce'));
+    banner.classList.remove('visible');
+    progressBar.style.width = '0%';
+    btnPlay.disabled = false;
+}
+
+// 主播放流程
+async function playShow() {
+    if (isPlaying) return;
+    isPlaying = true;
+    stopFlag  = false;
+    btnPlay.disabled = true;
+    btnReset.disabled = false;
+
+    // 先重置所有
+    dogs.forEach(d => d.classList.remove('show','speaking','active-bounce'));
+    banner.classList.remove('visible');
+    progressBar.style.width = '0%';
+
+    for (let i = 0; i < characters.length; i++) {
+        if (stopFlag) break;
+
+        const char = characters[i];
+        const dogEl = dogs[i];
+
+        // 更新进度条
+        progressBar.style.width = ((i / characters.length) * 100) + '%';
+
+        // 1. 出场动画
+        dogEl.classList.add('show');
+        spawnStars(dogEl);
+        await sleep(500);
+        if (stopFlag) break;
+
+        // 2. 显示角色名 banner
+        banner.textContent = `🐾 ${char.intro}～`;
+        banner.classList.add('visible');
+
+        // 3. 开始说话（气泡 + 嘴巴动画）
+        dogEl.classList.add('speaking', 'active-bounce');
+
+        // 4. 语音朗读
+        await speak(char);
+        if (stopFlag) break;
+
+        // 5. 停止说话
+        dogEl.classList.remove('speaking', 'active-bounce');
+        banner.classList.remove('visible');
+
+        await sleep(300);
+    }
+
+    if (!stopFlag) {
+        // 全部完成
+        progressBar.style.width = '100%';
+        banner.textContent = '🎉 祝元宝天天开心，听爸爸话！';
+        banner.classList.add('visible');
+        launchConfetti();
+
+        // 所有狗狗一起跳
+        dogs.forEach(d => d.classList.add('active-bounce'));
+        await sleep(3000);
+        dogs.forEach(d => d.classList.remove('active-bounce'));
+        banner.classList.remove('visible');
+    }
+
+    isPlaying = false;
+    btnPlay.disabled = false;
+}
+
+// 点击蒙层 → 开始
+function startAll() {
+    const overlay = document.getElementById('startOverlay');
+    overlay.style.display = 'none';
+    playShow();
+}
+
+// 点击单个狗狗 → 单独朗读
+dogs.forEach((dogEl, i) => {
+    dogEl.addEventListener('click', async () => {
+        if (isPlaying) return;
+        synth && synth.cancel();
+        dogEl.classList.add('speaking','active-bounce');
+        banner.textContent = `🐾 ${characters[i].intro}～`;
+        banner.classList.add('visible');
+        await speak(characters[i]);
+        dogEl.classList.remove('speaking','active-bounce');
+        banner.classList.remove('visible');
+    });
+});
+</script>
 </body>
 </html>
